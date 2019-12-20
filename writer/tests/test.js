@@ -1,15 +1,29 @@
 const { createReadStream } = require('fs')
-const { assert } = require('chai')
+const { expect } = require('chai')
 const path = require('path')
 const fetch = require('node-fetch')
+const MongoClient = require('mongodb').MongoClient
+const mongoUnit = require('mongo-unit')
 
-describe('Test post endpoint', () => {
+const app = require('../app/app.js')
 
-  const app = require('../app.js')
+describe('Test post endpoint', async () => {
+
+  let mongoClient, server
+
+  before(async () => {
+    await mongoUnit.start()
+    mongoClient = new MongoClient(mongoUnit.getUrl(), { useUnifiedTopology: true })
+    mongoClient.connect()
+    server = app({ mongoClient }).listen(3000)
+    server.on('close', () => {
+     mongoClient.close()
+    })
+  })
 
   after(() => {
-    app.close()
-    process.exit()
+    server.close()
+    return mongoUnit.stop()
   })
 
   it('POST /upload should return 202', async () => {
@@ -18,7 +32,16 @@ describe('Test post endpoint', () => {
       method: 'POST',
       body: stream
     })
-    assert.equal(response.status, 202)
+    expect(response.status).to.be.equal(202)
+  })
+
+  it('Mongo collecion should have 4 members and contain some ', async () => {
+    const db = await mongoClient.db('importer')
+    const queryCursor = await db.collection('data').find()
+    let itemsCount = await queryCursor.count()
+    expect(itemsCount).to.be.equal(4)
+    let item = await queryCursor.next()
+    expect(item).to.include.keys('Country', 'Sector', 'Parent sector')
   })
 
 })
