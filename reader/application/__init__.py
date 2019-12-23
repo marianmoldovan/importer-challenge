@@ -2,6 +2,9 @@ from flask import Flask
 
 def create_app(test_config=None):
     app = Flask(__name__)
+    app.config.from_mapping(
+        MONGO_URI='mongodb://localhost:27017/importer'
+    )
     if test_config is None:
         app.config.from_pyfile('./config.py', silent=False)
     else:
