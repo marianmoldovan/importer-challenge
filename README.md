@@ -12,12 +12,17 @@ The endpoints are exposed trough 2 apps
 
 ## Writer
 
-Located in the [reader](https://github.com/marianmoldovan/importer-challenge/tree/master/writer) folder. It contains a Node project that uses the framework Koa to expose a single endpoint, /upload that accepts a file and returns an 202 Accepted if there where no errors.
+Located in the [writer](https://github.com/marianmoldovan/importer-challenge/tree/master/writer) folder. It contains a Node project that uses the framework Koa to expose a single endpoint, /upload that accepts a file and returns an 202 Accepted if there where no errors.
+
+### Usage
+
+ * POST /upload
+ * binary file containg a csv file
 
 ### Dependencies
-  * [koa](https://github.com/koajs/koa)
+  * [koa](https://github.com/koajs/koa). Choosen because of simplicity and big support in the community
   * [@koa/router](https://github.com/koajs/router). Library used to handle routing in the project
-  * [koa-depsi](https://github.com/SachaCR/koa-depsi). Dependency injection library, used to bind external dependency to the koa app
+  * [koa-depsi](https://github.com/SachaCR/koa-depsi). Dependency injection library, used to bind external dependencies to the koa app, like the database client
   * [mongodb](https://github.com/mongodb/node-mongodb-native). Client to connect to mongodb
   * [neat-csv](https://github.com/sindresorhus/neat-csv). Parses csv files, wrapper of csv-parser
   
@@ -36,9 +41,54 @@ The app has only 6 files:
   * routes.js. Includes the only route, /upload and links it to the controller
   * Dockerfile. Deployment package of the app
   
+### Development
+  * To install the dependencies, run: ```yarn install```. For this you need yarn installed
+  * To run this app isolated, run in the shell: ```yarn run start```
+  * You need a mongodb instance to run the code, you could use a dockerized instance. Try ```docker run -d -p 27017-27019:27017-27019 --name mongodb mongo:4.0.4```
+  
 ### Test
 
 Located in the test folder, the command ```yarn run test``` will trigger the two tests. Using a mongodb mock, inserts a sample csv with 4 columns and after calling the api, checks if the API returned 202 and if the collection has the inserted documents.
 
 
 ## Reader
+
+Located in the [reader](https://github.com/marianmoldovan/importer-challenge/tree/master/reader) folder. It contains a Python project using Flask microframework. Node project that uses the framework Koa to expose a single endpoint, /upload that accepts a file and returns an 202 Accepted if there where no errors.
+
+### Usage
+
+ * GET /query
+ * Params:
+   * country. Optional. Filter by country
+   * sector. Optional. Filters the response by sector
+   * parent. Optional. Filters for the desired parent sector
+ * Pagination. By default the endpoint will return the first 20 items. You can paginate using the following url parameters:
+   * limit. Optional, by default, 20. Indicates how many items you want in the response.
+   * offset. Optional, by default, 0. Indicates how many items the query should skip.
+
+### Dependencies
+  * [Flask](https://www.palletsprojects.com/p/flask/). Microframework for web apps. Simple to use, one of the most popular frameworks.
+  * [Flask-PyMongo](https://github.com/dcrosta/flask-pymongo). MongoDB client library in python 
+  
+Also, for testing purposes, it also relies on:
+  * pytest. Library for performing tests
+
+### Code
+
+The directory reader has a folder called [application](https://github.com/marianmoldovan/importer-challenge/tree/master/reader/application) containing a Flask app. There are 4 files:
+  * __init__.py. Contains the factory method that builds the Flask app along with it's necesary dependencies
+  * config.py. Containing the necessary configuration for the project
+  * db.py. Containing the mongo client
+  * reader.py. Containing the flask blueprint for the query endpoint. Where is located all the logic related to the endpoint itself
+  
+### Development
+  * To install the dependencies, first create a virtualenv: ```python3 -m venv .flaskenv```. Then activate it: ```source .flaskenv/bin/activate```. And then install the dependencies, ```pip install -r requirements.txt```
+  * To run this app isolated, run in the shell: ```flask run```
+  * You need a mongodb instance to run the code, you could use a dockerized instance. Try ```docker run -d -p 27017-27019:27017-27019 --name mongodb mongo:4.0.4```
+  
+### Test
+
+The project tests it's set up with pytest and has a local configuration file, so to trigger the test, you only have to call ```pytest```from the root folder. 
+  
+## Deploy/instalation
+
