@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "test": "mocha ./tests/*.js --reporter spec --timeout 5000"
+    "test": "mocha ./tests/*.js --reporter spec --timeout 5000",
+    "run": "node index"
   },
   "dependencies": {
     "@koa/router": "^8.0.5",
