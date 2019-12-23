@@ -82,7 +82,10 @@ The directory reader has a folder called [application](https://github.com/marian
   * reader.py. Containing the flask blueprint for the query endpoint. Where is located all the logic related to the endpoint itself
   
 ### Development
-  * To install the dependencies, first create a virtualenv: ```python3 -m venv .flaskenv```. Then activate it: ```source .flaskenv/bin/activate```. And then install the dependencies, ```pip install -r requirements.txt```
+  * To install the dependencies you need to do the following steps:
+    * First create a virtualenv: ```python3 -m venv .flaskenv```
+    * Then activate it: ```source .flaskenv/bin/activate```
+    * Finally install the dependencies, ```pip install -r requirements.txt```
   * To run this app isolated, run in the shell: ```flask run```
   * You need a mongodb instance to run the code, you could use a dockerized instance. Try ```docker run -d -p 27017-27019:27017-27019 --name mongodb mongo:4.0.4```
   
@@ -92,3 +95,19 @@ The project tests it's set up with pytest and has a local configuration file, so
   
 ## Deploy/instalation
 
+In order to deploy, test and use the api, there is a Dockerfile in each app and a docker-compose file in the root directory of the repository. The docker compoose contains the following services:
+  * mongodb. A mongodb instance shared by the two apps (reader and writer)
+  * proxy. A nginx docker configured as a proxy, so you can make requests to a single host, that will redirect each request, based on the url to the appropiate container.
+  * reader. Python app that contains the GET /query endpoint
+  * writer. Node app that contains the POST /upload endpoint
+  
+To deploy all you need is docker and docker-compose and hit the following commands in root directory:
+
+```
+docker-compose build
+docker-compose up
+```
+
+To manually test the app you can do it simply with curl:
+ * writer app. Put a csv file (sample.csv) in the directory and type: ```curl --upload-file sample.csv -X POST localhost/upload```
+ * reader app. Just ```curl localhost/query``` or ```curl localhost/query?country=ROU```
