@@ -1,0 +1,47 @@
+version: "3.7"
+services:
+
+  nginx:
+    build:
+      context: ./proxy
+    container_name: nginx
+    ports:
+      - 80:80
+      - 443:443
+    links:
+      - reader
+      - writer
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    expose:
+      - 27017
+
+  reader:
+    container_name: reader
+    build:
+      context: ./reader
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/importer
+      - FLASK_RUN_PORT=5000
+    expose:
+      - 5000
+
+  writer:
+    container_name: writer
+    build:
+      context: ./writer
+    ports:
+      - "5001:5001"
+    depends_on:
+      - mongo
+    environment:
+      - PORT=5001
+      - MONGO_URI=mongodb://mongo:27017/importer
+    expose:
+      - 5001
