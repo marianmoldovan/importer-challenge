@@ -12,14 +12,14 @@ The endpoints are exposed trough 2 apps
 
 ## Writer
 
-Located in the (reader)[!https://github.com/marianmoldovan/importer-challenge/tree/master/writer] folder. It contains a Node project that uses the framework Koa to expose a single endpoint, /upload that accepts a file and returns an 202 Accepted if there where no errors.
+Located in the [reader](https://github.com/marianmoldovan/importer-challenge/tree/master/writer) folder. It contains a Node project that uses the framework Koa to expose a single endpoint, /upload that accepts a file and returns an 202 Accepted if there where no errors.
 
 ### Dependencies
-  * koa
-  * @koa/router. Library used to handle routing in the project
-  * koa-depsi. Dependency injection library, used to bind external dependency to the koa app
-  * mongodb. Client to connect to mongodb
-  * neat-csv. Parses csv files
+  * [koa](https://github.com/koajs/koa)
+  * [@koa/router](https://github.com/koajs/router). Library used to handle routing in the project
+  * [koa-depsi](https://github.com/SachaCR/koa-depsi). Dependency injection library, used to bind external dependency to the koa app
+  * [mongodb](https://github.com/mongodb/node-mongodb-native). Client to connect to mongodb
+  * [neat-csv](https://github.com/sindresorhus/neat-csv). Parses csv files, wrapper of csv-parser
   
 Also, for testing purposes, it also relies on:
   * chai. Popular framework for building tests
