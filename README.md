@@ -53,7 +53,7 @@ Located in the test folder, the command ```yarn run test``` will trigger the two
 
 ## Reader
 
-Located in the [reader](https://github.com/marianmoldovan/importer-challenge/tree/master/reader) folder. It contains a Python project using Flask microframework. Node project that uses the framework Koa to expose a single endpoint, /upload that accepts a file and returns an 202 Accepted if there where no errors.
+Located in the [reader](https://github.com/marianmoldovan/importer-challenge/tree/master/reader) folder. It contains a Python project using Flask microframework. Expose a single endpoint, /query that accepts parameters to find the desired items in the db.
 
 ### Usage
 
