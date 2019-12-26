@@ -1,6 +1,6 @@
 const neatCsv = require('neat-csv')
 
-const upload = async (ctx, dbClient) => {
+const upload = async (ctx) => {
   try {
     // We  allow neat csv library parse and save in memory the database
     const data = await neatCsv(ctx.req)
