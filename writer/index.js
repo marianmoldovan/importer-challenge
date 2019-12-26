@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient
+// Principal module, that creates the koa app and handles the endpoints
 const app = require('./app/app')
 
 // Create and constructs the mongodb client

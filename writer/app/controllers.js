@@ -1,5 +1,6 @@
 const neatCsv = require('neat-csv')
 
+// The single handler of the upload endpoint. Takes a csv file, parses it and it gets inserted in the db
 const upload = async (ctx) => {
   try {
     // We  allow neat csv library parse and save in memory the database
